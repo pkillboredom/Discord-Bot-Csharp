@@ -76,6 +76,6 @@ namespace Discord_Bot
         [Alias("sourcecode", "src")]
         [Summary("Links the source code used for this bot.")]
         public async Task Source()
-            => await ReplyAsync($"<:Blobcatbolb:613060487160135691> **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");
+            => await ReplyAsync($":heart: **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");
     }
 }
