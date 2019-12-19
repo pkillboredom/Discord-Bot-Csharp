@@ -3,7 +3,7 @@
 "version": "1.0",
 "token": "BOT_TOKEN_HERE",
 
-"prefix": "!",
+"prefix": ".",
 "join_message": "Hello, I'm Discord Bot! :heart:",
 
 "currently": "playing|listening|watching|streaming",
