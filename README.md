@@ -4,7 +4,9 @@ This is the source code I made based on my Discord bot called [Konek0](https://d
 ## Need help?  
 For help, please join [my Discord server](https://discord.gg/TtR32WT).  
 ## Requirements  
-* [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)   
+* [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
+* [Discord.Net](https://www.nuget.org/packages/Discord.Net/)
+* [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
 * 4 braincells
 ##  This source code contains:  
 * A sample of fun commands
