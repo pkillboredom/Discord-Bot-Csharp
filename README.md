@@ -1,6 +1,6 @@
 # Discord Bot C# 
 This is the source code I made based on my Discord bot called [Konek0](https://discordapp.com/oauth2/authorize?client_id=604001646514667541&scope=bot&permissions=1543892215). You can use this source to easily get started with making a Discord bot in C#. Crediting me isn't necessary, but will definitely be appreciated. Have fun!  
-![Discord](https://i.imgur.com/WcnC7HT.png)
+![Discord](https://i.imgur.com/JpbYChQ.png)
 ## Requirements  
 * [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
 * [Discord.Net](https://www.nuget.org/packages/Discord.Net/)
