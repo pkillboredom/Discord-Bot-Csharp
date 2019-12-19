@@ -21,3 +21,5 @@ This is the source code I made based on my Discord bot called [Konek0](https://d
 
 ## Need help?  
 To ask any questions or leave a comment about anything, please join [my Discord server](https://discord.gg/TtR32WT).  
+
+![Kanna](https://media.giphy.com/media/cgEP4Iee5gvks/giphy.gif)
