@@ -71,5 +71,11 @@ namespace Discord_Bot
                 $"\n[Hierarchy position]  {role.Position}" + // The hierarchy position of the role.
                 $"\n[Color Hex]           {role.Color}```"); // The color hex of the role.
         }
+
+        [Command("source")]
+        [Alias("sourcecode", "src")]
+        [Summary("Links the source code used for this bot.")]
+        public async Task Source()
+            => await ReplyAsync($"<:Blobcatbolb:613060487160135691> **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");
     }
 }
