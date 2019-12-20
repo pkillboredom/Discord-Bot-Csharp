@@ -13,7 +13,7 @@ This is the source code I made based on my Discord bot called [Konek0](https://d
 2. Go to the [Bot section](https://i.imgur.com/VaaG2ST.png), build a bot and copy the bot token.  
 3. Open the *Config.json* file and replace "BOT_TOKEN_HERE" with your bot token. Simply run the project and your bot should now connect!
 
-##  This source code contains:  
+##  This source code contains  
 * A sample of fun commands
 * A sample of utility commands
 * A sample of moderator commands
