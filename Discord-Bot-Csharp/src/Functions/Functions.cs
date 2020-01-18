@@ -26,22 +26,22 @@ namespace Discord_Bot
 
                 if (currently.ToLower() == "playing")
                 {
-                    await Client.SetGameAsync(playingstatus, "https://www.google.com/", ActivityType.Playing);
+                    await Client.SetGameAsync(playingstatus, type: ActivityType.Playing);
                     Console.WriteLine($"Playing status set | Playing: {playingstatus}");
                 }
                 if (currently.ToLower() == "listening")
                 {
-                    await Client.SetGameAsync(playingstatus, "https://www.google.com/", ActivityType.Listening);
+                    await Client.SetGameAsync(playingstatus, type: ActivityType.Listening);
                     Console.WriteLine($"Playing status set | Listening: {playingstatus}");
                 }
                 if (currently.ToLower() == "watching")
                 {
-                    await Client.SetGameAsync(playingstatus, "https://www.google.com/", ActivityType.Watching);
+                    await Client.SetGameAsync(playingstatus, type: ActivityType.Watching);
                     Console.WriteLine($"Playing status set | Watching: {playingstatus}");
                 }
                 if (currently.ToLower() == "streaming")
                 {
-                    await Client.SetGameAsync(playingstatus, "https://www.google.com/", ActivityType.Streaming);
+                    await Client.SetGameAsync(playingstatus, type: ActivityType.Streaming);
                     Console.WriteLine($"Playing status set | Streaming: {playingstatus}");
                 }
                 if (status.ToLower() == "online")
