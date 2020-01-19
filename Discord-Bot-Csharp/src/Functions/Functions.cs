@@ -27,42 +27,42 @@ namespace Discord_Bot
                 if (currently.ToLower() == "playing")
                 {
                     await Client.SetGameAsync(playingstatus, type: ActivityType.Playing);
-                    Console.WriteLine($"Playing status set | Playing: {playingstatus}");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Playing: {playingstatus}");
                 }
                 if (currently.ToLower() == "listening")
                 {
                     await Client.SetGameAsync(playingstatus, type: ActivityType.Listening);
-                    Console.WriteLine($"Playing status set | Listening: {playingstatus}");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Listening: {playingstatus}");
                 }
                 if (currently.ToLower() == "watching")
                 {
                     await Client.SetGameAsync(playingstatus, type: ActivityType.Watching);
-                    Console.WriteLine($"Playing status set | Watching: {playingstatus}");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Watching: {playingstatus}");
                 }
                 if (currently.ToLower() == "streaming")
                 {
                     await Client.SetGameAsync(playingstatus, type: ActivityType.Streaming);
-                    Console.WriteLine($"Playing status set | Streaming: {playingstatus}");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Streaming: {playingstatus}");
                 }
                 if (status.ToLower() == "online")
                 {
                     await Client.SetStatusAsync(UserStatus.Online);
-                    Console.WriteLine($"Online status set | Online");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Online");
                 }
                 if (status.ToLower() == "dnd")
                 {
                     await Client.SetStatusAsync(UserStatus.DoNotDisturb);
-                    Console.WriteLine($"Online status set | Do Not Disturb");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Do Not Disturb");
                 }
                 if (status.ToLower() == "idle")
                 {
                     await Client.SetStatusAsync(UserStatus.Idle);
-                    Console.WriteLine($"Online status set | Idle");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Idle");
                 }
                 if (status.ToLower() == "offline")
                 {
                     await Client.SetStatusAsync(UserStatus.Invisible);
-                    Console.WriteLine($"Online status set | Offline");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Offline");
                 }
             }
         }
