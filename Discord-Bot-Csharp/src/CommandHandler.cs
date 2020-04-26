@@ -38,7 +38,7 @@ namespace Discord_Bot
 
             int ArgPos = 0; // Prefix position.
 
-            using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory().Replace(@"\bin\Debug", "").Replace(@"\bin\Release", "") + @"\src\Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' or '\bin\Release' part and replaces it with 'Config.json'. Your directory may differ.
+            using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' or '\bin\Release' part and replaces it with 'Config.json'. Your directory may differ.
             {
                 var readJSON = configjson.ReadToEnd(); // Read the Config.json file.
                 var config = (JObject)JsonConvert.DeserializeObject(readJSON); // Deserialize the JSON.
@@ -59,7 +59,7 @@ namespace Discord_Bot
         {                    
             foreach (var channel in guild.TextChannels.OrderBy(x => x.Position)) // Loop through every channel.
             {
-                using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory().Replace(@"\bin\Debug", "").Replace(@"\bin\Release", "") + @"\src\Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' part and replaces it with 'Config.json'. Your directory may differ.
+                using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' part and replaces it with 'Config.json'. Your directory may differ.
                 {
                     var readJSON = configjson.ReadToEnd(); // Read the Config.json file.
                     var config = (JObject)JsonConvert.DeserializeObject(readJSON); // Deserialize the JSON.

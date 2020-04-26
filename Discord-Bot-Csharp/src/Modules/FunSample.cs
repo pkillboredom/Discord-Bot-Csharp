@@ -38,7 +38,7 @@ namespace Discord_Bot
         [Summary("Check your administrator status")]
         public async Task Amiadmin()
         {
-            if (Context.Guild.GetUser(Context.Message.Author.Id).GuildPermissions.Administrator) // If the user has administrator permissions.
+            if ((Context.User as SocketGuildUser).GuildPermissions.Administrator) // If the user has administrator permissions.
                 await ReplyAsync($"Yes, **{Context.Message.Author.Username}**, you're an admin!");
             else
                 await ReplyAsync($"No, **{Context.Message.Author.Username}**, you're **not** an admin!");
