@@ -6,6 +6,7 @@ This is the source code I made based on my Discord bot called [Konek0](https://k
 * [Microsoft Visual Studio](https://visualstudio.microsoft.com/downloads/)
 * [Discord.Net](https://www.nuget.org/packages/Discord.Net/)
 * [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/)
+* [Microsoft DI Extension](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection/3.1.3)
 * 4 braincells  
 
 #  How to set up
