@@ -10,8 +10,8 @@ This is the source code I made based on my Discord bot called [Konek0](https://k
 * 4 braincells  
 
 #  How to set up
-1. Go to the [Discord Developer Portal](https://discordapp.com/developers/applications/) and create a [new application](https://i.imgur.com/LBK4wnz.png).  
-2. Go to the [Bot section](https://i.imgur.com/VaaG2ST.png), build a bot and copy the bot token.  
+1. Go to the [Discord Developer Portal](https://discordapp.com/developers/) and create a new application.  
+2. Go to the Bot section, build a bot and copy the bot token.  
 3. Open the *Config.json* file and replace "BOT_TOKEN_HERE" with your bot token. Simply run the project and your bot should now connect!
 
 ##  This source code contains  
