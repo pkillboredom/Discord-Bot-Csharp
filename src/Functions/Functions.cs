@@ -62,7 +62,7 @@ namespace Discord_Bot
 
         public static string GetAvatarUrl(SocketUser user)
         {
-            return user.GetAvatarUrl(size: 2014) ?? user.GetDefaultAvatarUrl(); 
+            return user.GetAvatarUrl(size: 1024) ?? user.GetDefaultAvatarUrl(); 
             // Get user avatar and resize it 1024x1024. If the user has no avatar, get the default Discord logo.
         }
     }
