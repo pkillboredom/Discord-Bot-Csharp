@@ -23,7 +23,7 @@ namespace Discord_Bot
         [RequireBotPermission(GuildPermission.BanMembers)]
         public async Task Ban(SocketGuildUser targetUser, [Remainder]string reason = "No reason provided.")
         {
-            await Context.Guild.AddBanAsync(targetUser.Id, 0, reason); // Ban the user and delete his messages from the past x days.
+            await Context.Guild.AddBanAsync(targetUser.Id, 0, reason);
             await ReplyAsync($"**{targetUser}** has been banned. Bye bye :wave:");
         }
 
@@ -33,7 +33,7 @@ namespace Discord_Bot
         [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task Unban(ulong targetUser)
         {
-            await Context.Guild.RemoveBanAsync(targetUser); // Remove the ban from the user.
+            await Context.Guild.RemoveBanAsync(targetUser);
             await Context.Channel.SendMessageAsync($"The user has been unbanned :clap:");
         }
 
@@ -41,11 +41,11 @@ namespace Discord_Bot
         [Summary("Bulk deletes messages in chat")]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task DelMesAsync(int delnum)
+        public async Task Purge(int delNumber)
         {
-            var channel = Context.Channel as SocketTextChannel; // Cast the channel to a SocketTextChannel.
-            var items = await Context.Channel.GetMessagesAsync(delnum + 1).FlattenAsync(); // Get the x amount of messages + the command message and flatten them.
-            await channel.DeleteMessagesAsync(items); // Delete the messages.
+            var channel = Context.Channel as SocketTextChannel;
+            var items = await Context.Channel.GetMessagesAsync(delNumber + 1).FlattenAsync();
+            await channel.DeleteMessagesAsync(items);
         }
 
         [Command("reloadconfig")]

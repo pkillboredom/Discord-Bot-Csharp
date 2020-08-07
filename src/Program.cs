@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
-using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 
 namespace Discord_Bot
 {
@@ -25,37 +23,34 @@ namespace Discord_Bot
                 Client.Log += LogAsync;
                 services.GetRequiredService<CommandService>().Log += LogAsync;
 
-                using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' or '\bin\Release' part and replaces it with 'Config.json'. Your directory may differ.
-                {
-                    var readJSON = configjson.ReadToEnd(); // Read the Config.json file.
-                    var config = (JObject)JsonConvert.DeserializeObject(readJSON); // Deserialize the JSON.
-                    string Token = config["token"].Value<string>(); // Get the bot token from the Config.json file.
+                JObject config = Functions.GetConfig();
+                string Token = config["token"].Value<string>(); // Get the bot token from the Config.json file.
 
-                    await Client.LoginAsync(TokenType.Bot, Token); // Login the bot to Discord.
-                    await Client.StartAsync(); // Start the bot.
+                await Client.LoginAsync(TokenType.Bot, Token); // Login the bot to Discord.
+                await Client.StartAsync(); // Start the bot.
 
-                    await services.GetRequiredService<CommandHandlingService>().InitializeAsync(); // Initialize the command handling service.
-                    await Task.Delay(-1); // Run the bot forever.
-                }                    
+                await services.GetRequiredService<CommandHandlingService>().InitializeAsync(); // Initialize the command handling service.
+                await Task.Delay(-1); // Run the bot forever.
+
             }
         }
 
         public ServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
-                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig // Add Discord to the collection.
+                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
                 { 
-                    MessageCacheSize = 250, // Enable message cache.
-                    LogLevel = LogSeverity.Info // Sets log level.
+                    MessageCacheSize = 250,
+                    LogLevel = LogSeverity.Info
                 }))
-                .AddSingleton(new CommandService(new CommandServiceConfig // Add the command service to the collection.
+                .AddSingleton(new CommandService(new CommandServiceConfig
                 { 
-                    LogLevel = LogSeverity.Info, // Sets log level.
-                    DefaultRunMode = RunMode.Async, // Run all commands asynchronously. 
-                    CaseSensitiveCommands = false // Make command case insensitive.
+                    LogLevel = LogSeverity.Info,
+                    DefaultRunMode = RunMode.Async,
+                    CaseSensitiveCommands = false 
                 }))
-                .AddSingleton<CommandHandlingService>() // Add command handler to the service.
-                .BuildServiceProvider(); // Build the service provider.
+                .AddSingleton<CommandHandlingService>()
+                .BuildServiceProvider();
         }
 
         private Task LogAsync(LogMessage log)

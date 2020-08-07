@@ -32,50 +32,51 @@ namespace Discord_Bot
         [RequireBotPermission(GuildPermission.EmbedLinks)] // Require the bot the have the 'embed links' permission to execute this command.
         public async Task ServerEmbed()
         {
-            double Percentage = (double)Context.Guild.Users.Count(x => x.IsBot) / (double)Context.Guild.MemberCount * 100d; // Calculate the percentage of bots in the server.
-            var RoundedPercentage = Math.Round(Percentage, 2); // Round the percentage to 2 digits.
+            double Percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d; // Calculate the percentage of bots in the server.
+            double RoundedPercentage = Math.Round(Percentage, 2); // Round the percentage to 2 digits.
 
-            EmbedBuilder Embed = new EmbedBuilder(); // Declare the embed builder.
-            Embed.WithColor(0, 225, 225)
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.WithColor(0, 225, 225)
                  .WithDescription(
-                $"🏷️\n**Guild name:** {Context.Guild.Name}\n" + // Name of the server.
-                $"**Guild ID:** {Context.Guild.Id}\n" + // ID of the server
-                $"**Created at:** {Context.Guild.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}\n" + // When the server was created.
-                $"**Owner:** {Context.Guild.Owner}\n\n" + // Owner of the server.
+                $"🏷️\n**Guild name:** {Context.Guild.Name}\n" +
+                $"**Guild ID:** {Context.Guild.Id}\n" +
+                $"**Created at:** {Context.Guild.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}\n" +
+                $"**Owner:** {Context.Guild.Owner}\n\n" +
                 $"💬\n" +
-                $"**Users:** {Context.Guild.MemberCount - Context.Guild.Users.Count(x => x.IsBot)}\n" + // Amount of members in the server, minus the bots.
-                $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {RoundedPercentage}% ]\n" + // Amount of bots in the server and the percentage. 
-                $"**Channels:** {Context.Guild.Channels.Count}\n" + // Amount of channels.
-                $"**Roles:** {Context.Guild.Roles.Count}\n" + // Amount of roles.
-                $"**Emotes: ** {Context.Guild.Emotes.Count}\n\n" + // Amount of Emotes.
-                $"🌎 **Region:** {Context.Guild.VoiceRegionId}\n\n" + // Server region.
-                $"🔒 **Security level:** {Context.Guild.VerificationLevel}") // Verification level of the server.
+                $"**Users:** {Context.Guild.MemberCount - Context.Guild.Users.Count(x => x.IsBot)}\n" +
+                $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {RoundedPercentage}% ]\n" +
+                $"**Channels:** {Context.Guild.Channels.Count}\n" +
+                $"**Roles:** {Context.Guild.Roles.Count}\n" + 
+                $"**Emotes: ** {Context.Guild.Emotes.Count}\n\n" + 
+                $"🌎 **Region:** {Context.Guild.VoiceRegionId}\n\n" + 
+                $"🔒 **Security level:** {Context.Guild.VerificationLevel}") 
                  .WithImageUrl(Context.Guild.IconUrl);
 
-            await ReplyAsync($":information_source: Server info for **{Context.Guild.Name}**", embed: Embed.Build()); // Send message and build the embed.
+            await ReplyAsync($":information_source: Server info for **{Context.Guild.Name}**", embed: embed.Build());
         }
 
         [Command("role")]
         [Alias("roleinfo")]
-        [Summary("Shows information about a role.")]
+        [Summary("Show information about a role.")]
         public async Task RoleInfo([Remainder]SocketRole role)
         {
-            if (role == Context.Guild.EveryoneRole || (role.ToString().Contains("@here"))) return; // Just in case someone tries to be funny.
+            if (role == Context.Guild.EveryoneRole) return; // Just in case someone tries to be funny.
 
             await ReplyAsync(
                 $":flower_playing_cards: **{role.Name}** information```ini" +
-                $"\n[Members]             {role.Members.Count()}" + // Amount of members in the role.
-                $"\n[Role ID]             {role.Id}" + // ID of the role.
-                $"\n[Hoisted status]      {role.IsHoisted}" + // If the role is hoisted or not.
-                $"\n[Created at]          {role.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}" + // When the role was made.
-                $"\n[Hierarchy position]  {role.Position}" + // The hierarchy position of the role.
-                $"\n[Color Hex]           {role.Color}```"); // The color hex of the role.
+                $"\n[Members]             {role.Members.Count()}" +
+                $"\n[Role ID]             {role.Id}" +
+                $"\n[Hoisted status]      {role.IsHoisted}" +
+                $"\n[Created at]          {role.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}" +
+                $"\n[Hierarchy position]  {role.Position}" +
+                $"\n[Color Hex]           {role.Color}```");
         }
 
         [Command("source")]
         [Alias("sourcecode", "src")]
-        [Summary("Links the source code used for this bot.")]
+        [Summary("Link the source code used for this bot.")]
         public async Task Source()
             => await ReplyAsync($":heart: **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");
+        // Please don't remove this command. I will appreciate it a lot <3
     }
 }

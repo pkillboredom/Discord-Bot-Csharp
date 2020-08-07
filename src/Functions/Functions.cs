@@ -12,64 +12,57 @@ namespace Discord_Bot
     {
         public static async Task SetBotStatus(DiscordSocketClient Client)
         {
-            using (StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json")) // Get the config file. Note: this gets the current directory and removes the '\bin\Debug' or '\bin\Release' part and replaces it with 'Config.json'. Your directory may differ.
+            JObject config = GetConfig();
+
+            // Get all needed JSON objects.
+            string currently = config["currently"]?.Value<string>().ToLower();
+            string statusText = config["playing_status"]?.Value<string>();
+            string onlineStatus = config["status"]?.Value<string>().ToLower();
+
+            // Set the online status
+            if (onlineStatus != null && onlineStatus != string.Empty)
             {
-                var readJSON = configjson.ReadToEnd(); // Read the Config.json file.
-                var config = (JObject)JsonConvert.DeserializeObject(readJSON); // Deserialize the JSON.
+                UserStatus userStatus = onlineStatus switch
+                {
+                    "online" => UserStatus.Online,
+                    "dnd" => UserStatus.DoNotDisturb,
+                    "idle" => UserStatus.Idle,
+                    "offline" => UserStatus.Invisible,
+                    _ => throw new NotImplementedException("User status does not exist."),
+                };
 
-                // Get all needed JSON objects.
-                string currently = config["currently"].Value<string>(); 
-                string playingstatus = config["playing_status"].Value<string>();
-                string status = config["status"].Value<string>();
-
-                //The following code will check the JSON file and change the bot status accordingly.
-
-                if (currently.ToLower() == "playing")
-                {
-                    await Client.SetGameAsync(playingstatus, type: ActivityType.Playing);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Playing: {playingstatus}");
-                }
-                if (currently.ToLower() == "listening")
-                {
-                    await Client.SetGameAsync(playingstatus, type: ActivityType.Listening);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Listening: {playingstatus}");
-                }
-                if (currently.ToLower() == "watching")
-                {
-                    await Client.SetGameAsync(playingstatus, type: ActivityType.Watching);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Watching: {playingstatus}");
-                }
-                if (currently.ToLower() == "streaming")
-                {
-                    await Client.SetGameAsync(playingstatus, type: ActivityType.Streaming);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Playing status set | Streaming: {playingstatus}");
-                }
-                if (status.ToLower() == "online")
-                {
-                    await Client.SetStatusAsync(UserStatus.Online);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Online");
-                }
-                if (status.ToLower() == "dnd")
-                {
-                    await Client.SetStatusAsync(UserStatus.DoNotDisturb);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Do Not Disturb");
-                }
-                if (status.ToLower() == "idle")
-                {
-                    await Client.SetStatusAsync(UserStatus.Idle);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Idle");
-                }
-                if (status.ToLower() == "offline")
-                {
-                    await Client.SetStatusAsync(UserStatus.Invisible);
-                    Console.WriteLine($"{DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")} | Online status set | Offline");
-                }
+                await Client.SetStatusAsync(userStatus);
+                Console.WriteLine($"{DateTime.Now.TimeOfDay:hh\\:mm\\:ss} | Online status set | {userStatus}");
             }
+
+            // Set the playing status
+            if (currently != null && currently != string.Empty && 
+                statusText != null && statusText != string.Empty)
+            {
+                ActivityType activity = currently switch
+                {
+                    "listening" => ActivityType.Listening,
+                    "watching" => ActivityType.Watching,
+                    "streaming" => ActivityType.Streaming,
+                    "playing" => ActivityType.Playing,
+                    _ => throw new NotImplementedException("Activity type does not exist."),
+                };
+
+                await Client.SetGameAsync(statusText, type: activity);
+                Console.WriteLine($"{DateTime.Now.TimeOfDay:hh\\:mm\\:ss} | Playing status set | {activity}: {statusText}");
+            }            
+        }
+
+        public static JObject GetConfig()
+        {
+            // Get the config file.
+            using StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json");
+                return (JObject)JsonConvert.DeserializeObject(configjson.ReadToEnd()); // Deserialize the JSON.
         }
 
         public static string GetAvatarUrl(SocketUser user)
         {
-            return user.GetAvatarUrl()?.Replace("size=128", "size=1024") ?? user.GetDefaultAvatarUrl().Replace("size=128", "size=1024"); 
+            return user.GetAvatarUrl(size: 2014) ?? user.GetDefaultAvatarUrl(); 
             // Get user avatar and resize it 1024x1024. If the user has no avatar, get the default Discord logo.
         }
     }

@@ -18,18 +18,19 @@ namespace Discord_Bot
         public async Task Pick([Remainder]string message = "")
         {
             string[] options = message.Split(new string[] { " or " }, StringSplitOptions.RemoveEmptyEntries); // Split the string at every ' or ' in the message.
-            Random r = new Random();
-            string selection = options[r.Next(options.Length)]; // Select a random option.
+            string selection = options[new Random().Next(options.Length)]; // Select a random option.
 
-            await ReplyAsync($"I choose **{selection}**"); // Send message with selection.
+            await ReplyAsync($"I choose **{selection}**");
+
+            // Note: ReplyAsync() is a shortcut for 'Context.Channel.SendMessageAsync();'
         }
 
         [Command("cookie")]
         [Summary("Give someone a cookie.")]
         public async Task Cookie(SocketGuildUser user)
         {
-            if (Context.Message.Author == user) // If the user gives a cookie to himself
-                await ReplyAsync($"{Context.User.Mention} doesn't have anyone to share a cookie with... :("); // Sad stuff.            
+            if (Context.Message.Author == user)
+                await ReplyAsync($"{Context.User.Mention} doesn't have anyone to share a cookie with... :(");          
             else
                 await ReplyAsync($"{Context.User.Mention} shared a cookie with **{user.Username}** :cookie:");
         }
@@ -38,7 +39,7 @@ namespace Discord_Bot
         [Summary("Check your administrator status")]
         public async Task AmIAdmin()
         {
-            if ((Context.User as SocketGuildUser).GuildPermissions.Administrator) // If the user has administrator permissions.
+            if ((Context.User as SocketGuildUser).GuildPermissions.Administrator)
                 await ReplyAsync($"Yes, **{Context.User.Username}**, you're an admin!");
             else
                 await ReplyAsync($"No, **{Context.User.Username}**, you're **not** an admin!");
