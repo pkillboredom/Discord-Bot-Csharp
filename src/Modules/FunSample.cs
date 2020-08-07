@@ -29,19 +29,19 @@ namespace Discord_Bot
         public async Task Cookie(SocketGuildUser user)
         {
             if (Context.Message.Author == user) // If the user gives a cookie to himself
-                await ReplyAsync($"{Context.Message.Author.Mention} doesn't have anyone to share a cookie with... :("); // Sad stuff.            
+                await ReplyAsync($"{Context.User.Mention} doesn't have anyone to share a cookie with... :("); // Sad stuff.            
             else
-                await ReplyAsync($"{Context.Message.Author.Mention} shared a cookie with **{user.Username}** :cookie:");
+                await ReplyAsync($"{Context.User.Mention} shared a cookie with **{user.Username}** :cookie:");
         }
 
         [Command("amiadmin")]
         [Summary("Check your administrator status")]
-        public async Task Amiadmin()
+        public async Task AmIAdmin()
         {
             if ((Context.User as SocketGuildUser).GuildPermissions.Administrator) // If the user has administrator permissions.
-                await ReplyAsync($"Yes, **{Context.Message.Author.Username}**, you're an admin!");
+                await ReplyAsync($"Yes, **{Context.User.Username}**, you're an admin!");
             else
-                await ReplyAsync($"No, **{Context.Message.Author.Username}**, you're **not** an admin!");
+                await ReplyAsync($"No, **{Context.User.Username}**, you're **not** an admin!");
         }
     }
 }
