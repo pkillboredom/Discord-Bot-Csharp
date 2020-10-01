@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using Newtonsoft.Json.Linq;
 using Discord;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Discord_Bot
 {
@@ -32,14 +33,14 @@ namespace Discord_Bot
         {
             if (rawMessage.Author.IsBot) return; // Ignore command if it's triggered by a bot.
             if (!(rawMessage is SocketUserMessage message)) return; // Cast message to SocketUserMessage.
-            var Context = new SocketCommandContext(Client, message); // Declare Context variable.
+            var Context = new SocketCommandContext(Client, message);
 
             int argPos = 0; // Prefix position.
 
             JObject config = Functions.GetConfig();
-            string prefix = config["prefix"].Value<string>(); // Get the "prefix" value.
+            string[] prefixes = JsonConvert.DeserializeObject<string[]>(config["prefixes"].ToString());
 
-            if (message.HasStringPrefix(prefix, ref argPos) || message.HasMentionPrefix(Client.CurrentUser, ref argPos)) // Check if message has the prefix or mentioned the bot.
+            if (prefixes.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(Client.CurrentUser, ref argPos)) // Check if message has the prefix or mentioned the bot.
             {
                 var result = await Commands.ExecuteAsync(Context, argPos, Services); // Execute the command.
 
@@ -50,12 +51,12 @@ namespace Discord_Bot
 
         private async Task SendJoinMessage(SocketGuild guild)
         {                    
-            foreach (var channel in guild.TextChannels.OrderBy(x => x.Position)) // Loop through every channel.
+            foreach (var channel in guild.TextChannels.OrderBy(x => x.Position))
             {
                 JObject config = Functions.GetConfig();
-                string joinMessage = config["join_message"]?.Value<string>(); // Get the join message value.
+                string joinMessage = config["join_message"]?.Value<string>();
 
-                if (joinMessage == null || joinMessage == string.Empty) return; // If the join message is empty, cancel the join message.
+                if (joinMessage == null || joinMessage == string.Empty) return;
 
                 var botPerms = channel.GetPermissionOverwrite(Client.CurrentUser).GetValueOrDefault();
                 if (botPerms.SendMessages == PermValue.Deny) continue; // If the bot doesn't have permission to send the welcome message, go to the next channel in the loop.
@@ -69,9 +70,9 @@ namespace Discord_Bot
         }
 
         private async Task Client_Ready()
-        => await Functions.SetBotStatus(Client); // Set bot status from the Config.json file.
+            => await Functions.SetBotStatus(Client); // Set bot status from the Config.json file.
 
         public async Task InitializeAsync()
-             => await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), Services); // Add modules to command service.
+            => await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), Services);
     }
 }
