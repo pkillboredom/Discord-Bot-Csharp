@@ -57,7 +57,7 @@ namespace Discord_Bot
         {
             // Get the config file.
             using StreamReader configjson = new StreamReader(Directory.GetCurrentDirectory() + @"/Config.json");
-                return (JObject)JsonConvert.DeserializeObject(configjson.ReadToEnd()); // Deserialize the JSON.
+                return (JObject)JsonConvert.DeserializeObject(configjson.ReadToEnd());
         }
 
         public static string GetAvatarUrl(SocketUser user)
