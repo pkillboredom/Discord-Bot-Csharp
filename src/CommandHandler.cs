@@ -24,32 +24,36 @@ namespace Discord_Bot
             Client = services.GetRequiredService<DiscordSocketClient>();
             Services = services;
 
-            Client.Ready += Client_Ready; // Set config on client ready.
-            Client.MessageReceived += HandleCommand; // Trigger the command handling task when a message is received.
-            Client.JoinedGuild += SendJoinMessage; // Send the join message when joining guild.
+            Client.Ready += ClientReadyAsync;
+            Client.MessageReceived += HandleCommandAsync;
+            Client.JoinedGuild += SendJoinMessageAsync;
         }
 
-        public async Task HandleCommand(SocketMessage rawMessage)
+        public async Task HandleCommandAsync(SocketMessage rawMessage)
         {
-            if (rawMessage.Author.IsBot) return; // Ignore command if it's triggered by a bot.
-            if (!(rawMessage is SocketUserMessage message)) return; // Cast message to SocketUserMessage.
-            var Context = new SocketCommandContext(Client, message);
+            // Ignore command if it's triggered by a bot.
+            if (rawMessage.Author.IsBot) return;
+            if (!(rawMessage is SocketUserMessage message)) return;
+
+            var context = new SocketCommandContext(Client, message);
 
             int argPos = 0; // Prefix position.
 
             JObject config = Functions.GetConfig();
             string[] prefixes = JsonConvert.DeserializeObject<string[]>(config["prefixes"].ToString());
 
-            if (prefixes.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(Client.CurrentUser, ref argPos)) // Check if message has the prefix or mentioned the bot.
+            // Check if message has the prefix or mentioned the bot.
+            if (prefixes.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(Client.CurrentUser, ref argPos))
             {
-                var result = await Commands.ExecuteAsync(Context, argPos, Services); // Execute the command.
+                // Execute the command.
+                var result = await Commands.ExecuteAsync(context, argPos, Services);
 
                 if (!result.IsSuccess && result.Error.HasValue)          
-                    await Context.Channel.SendMessageAsync($":x: {result.ErrorReason}");          
+                    await context.Channel.SendMessageAsync($":x: {result.ErrorReason}");          
             }
         }
 
-        private async Task SendJoinMessage(SocketGuild guild)
+        private async Task SendJoinMessageAsync(SocketGuild guild)
         {                    
             foreach (var channel in guild.TextChannels.OrderBy(x => x.Position))
             {
@@ -59,7 +63,7 @@ namespace Discord_Bot
                 if (joinMessage == null || joinMessage == string.Empty) return;
 
                 var botPerms = channel.GetPermissionOverwrite(Client.CurrentUser).GetValueOrDefault();
-                if (botPerms.SendMessages == PermValue.Deny) continue; // If the bot doesn't have permission to send the welcome message, go to the next channel in the loop.
+                if (botPerms.SendMessages == PermValue.Deny) continue;
                 try
                 {
                     await channel.SendMessageAsync(joinMessage);
@@ -69,8 +73,8 @@ namespace Discord_Bot
             }
         }
 
-        private async Task Client_Ready()
-            => await Functions.SetBotStatus(Client); // Set bot status from the Config.json file.
+        private async Task ClientReadyAsync()
+            => await Functions.SetBotStatusAsync(Client);
 
         public async Task InitializeAsync()
             => await Commands.AddModulesAsync(Assembly.GetEntryAssembly(), Services);

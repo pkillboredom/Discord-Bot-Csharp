@@ -7,22 +7,24 @@ namespace Discord_Bot
 {
     public class FunSample : ModuleBase<SocketCommandContext>
     {
-        [Command("hello")] // Command name.
-        [Summary("Say hello to the bot.")] // Summary of the command.
+        // Command name.
+        [Command("hello")]
+        // Command summary.
+        [Summary("Say hello to the bot.")]
         public async Task Hello()
             => await ReplyAsync($"Hello there, **{Context.User.Username}**!");
 
         [Command("pick")]
-        [Alias("choose")] // Aliases which will also trigger the command.
+        // Aliases that will also trigger the command.
+        [Alias("choose")]
         [Summary("Pick something.")]
         public async Task Pick([Remainder]string message = "")
         {
-            string[] options = message.Split(new string[] { " or " }, StringSplitOptions.RemoveEmptyEntries); // Split the string at every ' or ' in the message.
-            string selection = options[new Random().Next(options.Length)]; // Select a random option.
+            string[] options = message.Split(new string[] { " or " }, StringSplitOptions.RemoveEmptyEntries);
+            string selection = options[new Random().Next(options.Length)];
 
-            await ReplyAsync($"I choose **{selection}**");
-
-            // Note: ReplyAsync() is a shortcut for 'Context.Channel.SendMessageAsync();'
+            // ReplyAsync() is a shortcut for Context.Channel.SendMessageAsync()
+            await ReplyAsync($"I choose **{selection}**");            
         }
 
         [Command("cookie")]

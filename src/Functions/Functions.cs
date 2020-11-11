@@ -10,11 +10,10 @@ namespace Discord_Bot
 {
     public static class Functions
     {
-        public static async Task SetBotStatus(DiscordSocketClient Client)
+        public static async Task SetBotStatusAsync(DiscordSocketClient Client)
         {
             JObject config = GetConfig();
 
-            // Get all needed JSON objects.
             string currently = config["currently"]?.Value<string>().ToLower();
             string statusText = config["playing_status"]?.Value<string>();
             string onlineStatus = config["status"]?.Value<string>().ToLower();
@@ -24,11 +23,10 @@ namespace Discord_Bot
             {
                 UserStatus userStatus = onlineStatus switch
                 {
-                    "online" => UserStatus.Online,
                     "dnd" => UserStatus.DoNotDisturb,
                     "idle" => UserStatus.Idle,
                     "offline" => UserStatus.Invisible,
-                    _ => throw new NotImplementedException("User status does not exist."),
+                    _ => UserStatus.Online
                 };
 
                 await Client.SetStatusAsync(userStatus);
@@ -44,8 +42,7 @@ namespace Discord_Bot
                     "listening" => ActivityType.Listening,
                     "watching" => ActivityType.Watching,
                     "streaming" => ActivityType.Streaming,
-                    "playing" => ActivityType.Playing,
-                    _ => throw new NotImplementedException("Activity type does not exist."),
+                    _ => ActivityType.Playing
                 };
 
                 await Client.SetGameAsync(statusText, type: activity);
@@ -62,8 +59,8 @@ namespace Discord_Bot
 
         public static string GetAvatarUrl(SocketUser user)
         {
+            // Get user avatar and resize it 1024x1024. If the user has no avatar, get the default Discord avatar.
             return user.GetAvatarUrl(size: 1024) ?? user.GetDefaultAvatarUrl(); 
-            // Get user avatar and resize it 1024x1024. If the user has no avatar, get the default Discord logo.
         }
     }
 }

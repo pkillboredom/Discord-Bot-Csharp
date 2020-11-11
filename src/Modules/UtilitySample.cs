@@ -19,21 +19,18 @@ namespace Discord_Bot
         [Alias("getavatar")]
         [Summary("Get a user's avatar.")]
         public async Task GetAvatar([Remainder]SocketGuildUser user = null)
-        {
-            if (user is null)           
-                user = Context.User as SocketGuildUser; // If there is no user specified, get the avatar of the user who triggered the command.
-            
-            await ReplyAsync($":frame_photo: **{user.Username}**'s avatar\n{Functions.GetAvatarUrl(user)}"); // Reply with the user's avatar URL.
-        }
+            => await ReplyAsync($":frame_photo: **{(user ??= Context.User as SocketGuildUser).Username}**'s avatar\n{Functions.GetAvatarUrl(user)}");
+        
 
         [Command("info")]
         [Alias("server", "serverinfo")]
         [Summary("Show server information.")]
-        [RequireBotPermission(GuildPermission.EmbedLinks)] // Require the bot the have the 'embed links' permission to execute this command.
+        // Require the bot the have the 'embed links' permission to execute this command.
+        [RequireBotPermission(GuildPermission.EmbedLinks)]
         public async Task ServerEmbed()
         {
-            double Percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d; // Calculate the percentage of bots in the server.
-            double RoundedPercentage = Math.Round(Percentage, 2); // Round the percentage to 2 digits.
+            double Percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d;
+            double RoundedPercentage = Math.Round(Percentage, 2);
 
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithColor(0, 225, 225)
@@ -60,7 +57,8 @@ namespace Discord_Bot
         [Summary("Show information about a role.")]
         public async Task RoleInfo([Remainder]SocketRole role)
         {
-            if (role == Context.Guild.EveryoneRole) return; // Just in case someone tries to be funny.
+            // Just in case someone tries to be funny.
+            if (role == Context.Guild.EveryoneRole) return;
 
             await ReplyAsync(
                 $":flower_playing_cards: **{role.Name}** information```ini" +
@@ -72,11 +70,11 @@ namespace Discord_Bot
                 $"\n[Color Hex]           {role.Color}```");
         }
 
+        // Please don't remove this command. I will appreciate it a lot <3
         [Command("source")]
         [Alias("sourcecode", "src")]
         [Summary("Link the source code used for this bot.")]
         public async Task Source()
-            => await ReplyAsync($":heart: **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");
-        // Please don't remove this command. I will appreciate it a lot <3
+            => await ReplyAsync($":heart: **{Context.Client.CurrentUser}** is based on this source code:\nhttps://github.com/VACEfron/Discord-Bot-Csharp");      
     }
 }

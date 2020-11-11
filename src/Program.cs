@@ -23,14 +23,18 @@ namespace Discord_Bot
             Client.Log += LogAsync;
             services.GetRequiredService<CommandService>().Log += LogAsync;
 
+            // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
-            string Token = config["token"].Value<string>(); // Get the bot token from the Config.json file.
+            string Token = config["token"].Value<string>();
 
-            await Client.LoginAsync(TokenType.Bot, Token); // Log in the bot to Discord.
-            await Client.StartAsync(); // Start the bot.
+            // Log in to Discord and start the bot.
+            await Client.LoginAsync(TokenType.Bot, Token);
+            await Client.StartAsync();
 
-            await services.GetRequiredService<CommandHandlingService>().InitializeAsync(); // Initialize the command handling service.
-            await Task.Delay(-1); // Run the bot forever.
+            await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+
+            // Run the bot forever.
+            await Task.Delay(-1);
         }
 
         public ServiceProvider ConfigureServices()

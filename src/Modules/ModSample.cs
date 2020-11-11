@@ -9,11 +9,11 @@ namespace Discord_Bot
     {
         [Command("kick")]
         [Summary("Kick a user from the server.")]
-        [RequireBotPermission(GuildPermission.KickMembers)] // Require the bot to have permission to kick users.
-        [RequireUserPermission(GuildPermission.KickMembers)] // Require the user to have permission to kick users.
+        [RequireBotPermission(GuildPermission.KickMembers)]
+        [RequireUserPermission(GuildPermission.KickMembers)]
         public async Task Kick(SocketGuildUser targetUser, [Remainder]string reason = "No reason provided.")
         {
-            await targetUser.KickAsync(reason); // Kick the user
+            await targetUser.KickAsync(reason);
             await ReplyAsync($"**{targetUser}** has been kicked. Bye bye :wave:");
         }
 
@@ -50,10 +50,11 @@ namespace Discord_Bot
 
         [Command("reloadconfig")]
         [Summary("Reloads the config and applies changes")]
-        [RequireOwner] // Only the bot owner can use this command.
+        // Require the bot owner to execute the command successfully.
+        [RequireOwner]
         public async Task ReloadConfig()
         {
-            await Functions.SetBotStatus(Context.Client);
+            await Functions.SetBotStatusAsync(Context.Client);
             await ReplyAsync("Reloaded!");
         }
     }
