@@ -10,7 +10,7 @@ namespace Discord_Bot
 {
     public static class Functions
     {
-        public static async Task SetBotStatusAsync(DiscordSocketClient Client)
+        public static async Task SetBotStatusAsync(DiscordSocketClient client)
         {
             JObject config = GetConfig();
 
@@ -29,7 +29,7 @@ namespace Discord_Bot
                     _ => UserStatus.Online
                 };
 
-                await Client.SetStatusAsync(userStatus);
+                await client.SetStatusAsync(userStatus);
                 Console.WriteLine($"{DateTime.Now.TimeOfDay:hh\\:mm\\:ss} | Online status set | {userStatus}");
             }
 
@@ -45,7 +45,7 @@ namespace Discord_Bot
                     _ => ActivityType.Playing
                 };
 
-                await Client.SetGameAsync(statusText, type: activity);
+                await client.SetGameAsync(statusText, type: activity);
                 Console.WriteLine($"{DateTime.Now.TimeOfDay:hh\\:mm\\:ss} | Playing status set | {activity}: {statusText}");
             }            
         }
