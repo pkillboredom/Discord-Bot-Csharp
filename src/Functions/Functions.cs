@@ -19,7 +19,7 @@ namespace Discord_Bot
             string onlineStatus = config["status"]?.Value<string>().ToLower();
 
             // Set the online status
-            if (onlineStatus != null && onlineStatus != string.Empty)
+            if (!string.IsNullOrEmpty(onlineStatus))
             {
                 UserStatus userStatus = onlineStatus switch
                 {
@@ -34,8 +34,7 @@ namespace Discord_Bot
             }
 
             // Set the playing status
-            if (currently != null && currently != string.Empty && 
-                statusText != null && statusText != string.Empty)
+            if (!string.IsNullOrEmpty(currently) && !string.IsNullOrEmpty(statusText))
             {
                 ActivityType activity = currently switch
                 {
@@ -57,10 +56,10 @@ namespace Discord_Bot
                 return (JObject)JsonConvert.DeserializeObject(configjson.ReadToEnd());
         }
 
-        public static string GetAvatarUrl(SocketUser user)
+        public static string GetAvatarUrl(SocketUser user, ushort size = 1024)
         {
-            // Get user avatar and resize it 1024x1024. If the user has no avatar, get the default Discord avatar.
-            return user.GetAvatarUrl(size: 1024) ?? user.GetDefaultAvatarUrl(); 
+            // Get user avatar and resize it. If the user has no avatar, get the default Discord avatar.
+            return user.GetAvatarUrl(size: size) ?? user.GetDefaultAvatarUrl(); 
         }
     }
 }
