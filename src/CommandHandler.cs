@@ -60,10 +60,11 @@ namespace Discord_Bot
                 JObject config = Functions.GetConfig();
                 string joinMessage = config["join_message"]?.Value<string>();
 
-                if (joinMessage == null || joinMessage == string.Empty) return;
+                if (string.IsNullOrEmpty(joinMessage)) return;
 
                 var botPerms = channel.GetPermissionOverwrite(Client.CurrentUser).GetValueOrDefault();
                 if (botPerms.SendMessages == PermValue.Deny) continue;
+
                 try
                 {
                     await channel.SendMessageAsync(joinMessage);
