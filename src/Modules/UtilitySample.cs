@@ -29,8 +29,8 @@ namespace Discord_Bot
         [RequireBotPermission(GuildPermission.EmbedLinks)]
         public async Task ServerEmbed()
         {
-            double Percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d;
-            double RoundedPercentage = Math.Round(Percentage, 2);
+            double percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d;
+            double roundedPercentage = Math.Round(percentage, 2);
 
             EmbedBuilder embed = new EmbedBuilder();
             embed.WithColor(0, 225, 225)
@@ -41,7 +41,7 @@ namespace Discord_Bot
                 $"**Owner:** {Context.Guild.Owner}\n\n" +
                 $"💬\n" +
                 $"**Users:** {Context.Guild.MemberCount - Context.Guild.Users.Count(x => x.IsBot)}\n" +
-                $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {RoundedPercentage}% ]\n" +
+                $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {roundedPercentage}% ]\n" +
                 $"**Channels:** {Context.Guild.Channels.Count}\n" +
                 $"**Roles:** {Context.Guild.Roles.Count}\n" + 
                 $"**Emotes: ** {Context.Guild.Emotes.Count}\n\n" + 
