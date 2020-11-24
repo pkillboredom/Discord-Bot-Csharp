@@ -25,10 +25,10 @@ namespace Discord_Bot
 
             // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
-            string Token = config["token"].Value<string>();
+            string token = config["token"].Value<string>();
 
             // Log in to Discord and start the bot.
-            await Client.LoginAsync(TokenType.Bot, Token);
+            await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
