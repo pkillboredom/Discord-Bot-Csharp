@@ -20,8 +20,8 @@ namespace Discord_Bot
             Console.WriteLine("Ready for takeoff...");
             var Client = services.GetRequiredService<DiscordSocketClient>();
 
-            Client.Log += LogAsync;
-            services.GetRequiredService<CommandService>().Log += LogAsync;
+            Client.Log += Log;
+            services.GetRequiredService<CommandService>().Log += Log;
 
             // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
@@ -55,7 +55,7 @@ namespace Discord_Bot
                 .BuildServiceProvider();
         }
 
-        private Task LogAsync(LogMessage log)
+        private Task Log(LogMessage log)
         {
             Console.WriteLine(log.ToString());
             return Task.CompletedTask;
