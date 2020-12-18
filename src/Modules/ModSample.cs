@@ -44,7 +44,7 @@ namespace Discord_Bot
         public async Task Purge(int delNumber)
         {
             var channel = Context.Channel as SocketTextChannel;
-            var items = await Context.Channel.GetMessagesAsync(delNumber + 1).FlattenAsync();
+            var items = await channel.GetMessagesAsync(delNumber + 1).FlattenAsync();
             await channel.DeleteMessagesAsync(items);
         }
 
