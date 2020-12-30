@@ -7,16 +7,14 @@ namespace Discord_Bot
 {
     public class FunSample : ModuleBase<SocketCommandContext>
     {
-        // Command name.
-        [Command("hello")]
-        // Command summary.
-        [Summary("Say hello to the bot.")]
+        
+        [Command("hello")] // Command name.
+        [Summary("Say hello to the bot.")] // Command summary.
         public async Task Hello()
             => await ReplyAsync($"Hello there, **{Context.User.Username}**!");
 
         [Command("pick")]
-        // Aliases that will also trigger the command.
-        [Alias("choose")]
+        [Alias("choose")] // Aliases that will also trigger the command.
         [Summary("Pick something.")]
         public async Task Pick([Remainder]string message = "")
         {
