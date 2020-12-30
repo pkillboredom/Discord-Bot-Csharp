@@ -49,9 +49,8 @@ namespace Discord_Bot
         }
 
         [Command("reloadconfig")]
-        [Summary("Reloads the config and applies changes")]
-        // Require the bot owner to execute the command successfully.
-        [RequireOwner]
+        [Summary("Reloads the config and applies changes")] 
+        [RequireOwner] // Require the bot owner to execute the command successfully.
         public async Task ReloadConfig()
         {
             await Functions.SetBotStatusAsync(Context.Client);
