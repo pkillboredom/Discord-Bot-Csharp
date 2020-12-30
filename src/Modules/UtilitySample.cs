@@ -19,14 +19,13 @@ namespace Discord_Bot
         [Alias("getavatar")]
         [Summary("Get a user's avatar.")]
         public async Task GetAvatar([Remainder]SocketGuildUser user = null)
-            => await ReplyAsync($":frame_photo: **{(user ??= Context.User as SocketGuildUser).Username}**'s avatar\n{Functions.GetAvatarUrl(user)}");
+            => await ReplyAsync($":frame_photo: **{(user ?? Context.User as SocketGuildUser).Username}**'s avatar\n{Functions.GetAvatarUrl(user)}");
         
 
         [Command("info")]
         [Alias("server", "serverinfo")]
         [Summary("Show server information.")]
-        // Require the bot the have the 'embed links' permission to execute this command.
-        [RequireBotPermission(GuildPermission.EmbedLinks)]
+        [RequireBotPermission(GuildPermission.EmbedLinks)] // Require the bot the have the 'Embed Links' permissions to execute this command.
         public async Task ServerEmbed()
         {
             double percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d;
@@ -58,7 +57,8 @@ namespace Discord_Bot
         public async Task RoleInfo([Remainder]SocketRole role)
         {
             // Just in case someone tries to be funny.
-            if (role == Context.Guild.EveryoneRole) return;
+            if (role == Context.Guild.EveryoneRole)
+                return;
 
             await ReplyAsync(
                 $":flower_playing_cards: **{role.Name}** information```ini" +
