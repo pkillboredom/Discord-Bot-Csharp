@@ -24,14 +24,15 @@ namespace Discord_Bot
             _client = services.GetRequiredService<DiscordSocketClient>();
             _services = services;
 
+            // Event handlers
             _client.Ready += ClientReadyAsync;
             _client.MessageReceived += HandleCommandAsync;
             _client.JoinedGuild += SendJoinMessageAsync;
         }
 
-        public async Task HandleCommandAsync(SocketMessage rawMessage)
+        private async Task HandleCommandAsync(SocketMessage rawMessage)
         {
-            if (rawMessage.Author.IsBot || !(rawMessage is SocketUserMessage message))
+            if (rawMessage.Author.IsBot || !(rawMessage is SocketUserMessage message) || message.Channel is IDMChannel)
                 return;
 
             var context = new SocketCommandContext(_client, message);
@@ -41,7 +42,7 @@ namespace Discord_Bot
             JObject config = Functions.GetConfig();
             string[] prefixes = JsonConvert.DeserializeObject<string[]>(config["prefixes"].ToString());
 
-            // Check if message has the prefix or mentiones the bot.
+            // Check if message has any of the prefixes or mentiones the bot.
             if (prefixes.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 // Execute the command.
@@ -60,6 +61,7 @@ namespace Discord_Bot
             if (string.IsNullOrEmpty(joinMessage))
                 return;
 
+            // Send the join message in the first channel where the bot can send messsages.
             foreach (var channel in guild.TextChannels.OrderBy(x => x.Position))
             {                               
                 var botPerms = channel.GetPermissionOverwrite(_client.CurrentUser).GetValueOrDefault();
