@@ -18,9 +18,9 @@ namespace Discord_Bot
             using var services = ConfigureServices();
 
             Console.WriteLine("Ready for takeoff...");
-            var Client = services.GetRequiredService<DiscordSocketClient>();
+            var client = services.GetRequiredService<DiscordSocketClient>();
 
-            Client.Log += Log;
+            client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
 
             // Get the bot token from the Config.json file.
@@ -28,8 +28,8 @@ namespace Discord_Bot
             string token = config["token"].Value<string>();
 
             // Log in to Discord and start the bot.
-            await Client.LoginAsync(TokenType.Bot, token);
-            await Client.StartAsync();
+            await client.LoginAsync(TokenType.Bot, token);
+            await client.StartAsync();
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
