@@ -28,24 +28,23 @@ namespace Discord_Bot
         [RequireBotPermission(GuildPermission.EmbedLinks)] // Require the bot the have the 'Embed Links' permissions to execute this command.
         public async Task ServerEmbed()
         {
-            double percentage = Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d;
-            double roundedPercentage = Math.Round(percentage, 2);
+            double botPercentage = Math.Round(Context.Guild.Users.Count(x => x.IsBot) / Context.Guild.MemberCount * 100d, 2);
 
-            EmbedBuilder embed = new EmbedBuilder();
-            embed.WithColor(0, 225, 225)
-                 .WithDescription(
-                $"🏷️\n**Guild name:** {Context.Guild.Name}\n" +
-                $"**Guild ID:** {Context.Guild.Id}\n" +
-                $"**Created at:** {Context.Guild.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}\n" +
-                $"**Owner:** {Context.Guild.Owner}\n\n" +
-                $"💬\n" +
-                $"**Users:** {Context.Guild.MemberCount - Context.Guild.Users.Count(x => x.IsBot)}\n" +
-                $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {roundedPercentage}% ]\n" +
-                $"**Channels:** {Context.Guild.Channels.Count}\n" +
-                $"**Roles:** {Context.Guild.Roles.Count}\n" + 
-                $"**Emotes: ** {Context.Guild.Emotes.Count}\n\n" + 
-                $"🌎 **Region:** {Context.Guild.VoiceRegionId}\n\n" + 
-                $"🔒 **Security level:** {Context.Guild.VerificationLevel}") 
+            EmbedBuilder embed = new EmbedBuilder()
+                .WithColor(0, 225, 225)
+                .WithDescription(
+                    $"🏷️\n**Guild name:** {Context.Guild.Name}\n" +
+                    $"**Guild ID:** {Context.Guild.Id}\n" +
+                    $"**Created at:** {Context.Guild.CreatedAt:dd/M/yyyy}\n" +
+                    $"**Owner:** {Context.Guild.Owner}\n\n" +
+                    $"💬\n" +
+                    $"**Users:** {Context.Guild.MemberCount - Context.Guild.Users.Count(x => x.IsBot)}\n" +
+                    $"**Bots:** {Context.Guild.Users.Count(x => x.IsBot)} [ {botPercentage}% ]\n" +
+                    $"**Channels:** {Context.Guild.Channels.Count}\n" +
+                    $"**Roles:** {Context.Guild.Roles.Count}\n" +
+                    $"**Emotes: ** {Context.Guild.Emotes.Count}\n\n" +
+                    $"🌎 **Region:** {Context.Guild.VoiceRegionId}\n\n" +
+                    $"🔒 **Security level:** {Context.Guild.VerificationLevel}")
                  .WithImageUrl(Context.Guild.IconUrl);
 
             await ReplyAsync($":information_source: Server info for **{Context.Guild.Name}**", embed: embed.Build());
@@ -57,7 +56,7 @@ namespace Discord_Bot
         public async Task RoleInfo([Remainder]SocketRole role)
         {
             // Just in case someone tries to be funny.
-            if (role == Context.Guild.EveryoneRole)
+            if (role.Id == Context.Guild.EveryoneRole.Id)
                 return;
 
             await ReplyAsync(
@@ -65,7 +64,7 @@ namespace Discord_Bot
                 $"\n[Members]             {role.Members.Count()}" +
                 $"\n[Role ID]             {role.Id}" +
                 $"\n[Hoisted status]      {role.IsHoisted}" +
-                $"\n[Created at]          {role.CreatedAt.ToString("dd/M/yyyy", CultureInfo.InvariantCulture)}" +
+                $"\n[Created at]          {role.CreatedAt:dd/M/yyyy}" +
                 $"\n[Hierarchy position]  {role.Position}" +
                 $"\n[Color Hex]           {role.Color}```");
         }
