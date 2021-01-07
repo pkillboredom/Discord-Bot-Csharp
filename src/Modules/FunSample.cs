@@ -29,7 +29,7 @@ namespace Discord_Bot
         [Summary("Give someone a cookie.")]
         public async Task Cookie(SocketGuildUser user)
         {
-            if (Context.Message.Author == user)
+            if (Context.Message.Author.Id == user.Id)
                 await ReplyAsync($"{Context.User.Mention} doesn't have anyone to share a cookie with... :(");          
             else
                 await ReplyAsync($"{Context.User.Mention} shared a cookie with **{user.Username}** :cookie:");
