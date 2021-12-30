@@ -1,64 +1,69 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using NLog;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace Discord_Bot
 {
     public class Program
     {
         static void Main(string[] args)
-            => new Program().MainAsync().GetAwaiter().GetResult();
-
-        public async Task MainAsync()
         {
-            using var services = ConfigureServices();
+            var logger = LogManager.GetCurrentClassLogger();
+            try
+            {
+                var configBuilder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("config.json", optional: false);
 
-            Console.WriteLine("Ready for takeoff...");
-            var client = services.GetRequiredService<DiscordSocketClient>();
+                IConfiguration config = configBuilder.Build();
 
-            client.Log += Log;
-            services.GetRequiredService<CommandService>().Log += Log;
+                var services = new ServiceCollection()
+                    .AddSingleton(config)
+                    .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
+                    {
+                        MessageCacheSize = 500,
+                        LogLevel = LogSeverity.Info
+                    }))
+                    .AddSingleton(new CommandService(new CommandServiceConfig
+                    {
+                        LogLevel = LogSeverity.Info,
+                        DefaultRunMode = RunMode.Async,
+                        CaseSensitiveCommands = false
+                    }))
+                    .AddSingleton<CommandHandlingService>()
+                    .AddLogging(loggingBuilder =>
+                    {
+                        // configure Logging with NLog
+                        loggingBuilder.ClearProviders();
+                        loggingBuilder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                        loggingBuilder.AddNLog(config);
+                    })
+                    //.AddSingleton(typeof(Modules.MinecraftModule.MinecraftUtil))
+                    .BuildServiceProvider();
 
-            // Get the bot token from the Config.json file.
-            JObject config = Functions.GetConfig();
-            string token = config["token"].Value<string>();
+                new DiscordBot(services).MainAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                // NLog: catch any exception and log it.
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                LogManager.Shutdown();
+            }
 
-            // Log in to Discord and start the bot.
-            await client.LoginAsync(TokenType.Bot, token);
-            await client.StartAsync();
-
-            await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
-
-            // Run the bot forever.
-            await Task.Delay(-1);
         }
 
-        public ServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()
-                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
-                { 
-                    MessageCacheSize = 500,
-                    LogLevel = LogSeverity.Info
-                }))
-                .AddSingleton(new CommandService(new CommandServiceConfig
-                { 
-                    LogLevel = LogSeverity.Info,
-                    DefaultRunMode = RunMode.Async,
-                    CaseSensitiveCommands = false 
-                }))
-                .AddSingleton<CommandHandlingService>()
-                .BuildServiceProvider();
-        }
-
-        private Task Log(LogMessage log)
-        {
-            Console.WriteLine(log.ToString());
-            return Task.CompletedTask;
-        }
+        
     }
 }
